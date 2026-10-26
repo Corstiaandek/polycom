@@ -1,0 +1,51 @@
+# Polycom CX300 ↔ multi-target bridge
+
+device_name_substring = "Polycom CX300"
+reconnect_seconds = 2.0
+idle_clock = true
+
+[keys]
+# CX300 keypad → target id (only while Idle)
+"1" = "grok"
+"2" = "claude"
+"*" = "cycle"
+
+[autostart]
+enabled = false
+# When enabled, a Startup-folder .lnk is created on first run of: cx300-bridge --install-autostart
+
+[[targets]]
+id = "grok"
+label = "Grok Bot"
+window_title_regex = "(?i)grok\\s*bot"
+# Expand %LOCALAPPDATA% etc. at runtime
+exe = "%LOCALAPPDATA%\\Programs\\Grok Bot\\Grok Bot.exe"
+# Optional Windows shell:AppsFolder launch (leave empty to use exe)
+shell_app_id = ""
+voice_hotkey = "<ctrl>+d"
+send_hotkey = "<enter>"
+done_idle_seconds = 8.0
+
+[[targets]]
+id = "claude"
+label = "Claude"
+window_title_regex = "(?i)^claude(\\s|$)|claude\\s*-"
+exe = ""
+shell_app_id = "Claude_pzs8sxrjxfjjc!Claude"
+voice_hotkey = "<ctrl>+d"
+send_hotkey = "<enter>"
+done_idle_seconds = 8.0
+
+[display]
+line1_max = 16
+line2_max = 16
+
+[audio]
+# Matched against sounddevice device names (case-insensitive substring)
+playback_match = "Polycom CX300"
+capture_match = "Polycom CX300"
+ringtone_path = "assets/ringtone.wav"
+ringtone_duration_seconds = 2.5
+
+[logging]
+level = "INFO"

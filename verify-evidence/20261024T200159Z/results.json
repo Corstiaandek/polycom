@@ -1,0 +1,184 @@
+[
+  {
+    "id": "config_targets_keys",
+    "claim": "config.toml defines grok+claude targets and keys 1/2/* mapping",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "target_ids": [
+        "grok",
+        "claude"
+      ],
+      "keys": {
+        "1": "grok",
+        "2": "claude",
+        "*": "cycle"
+      }
+    },
+    "notes": ""
+  },
+  {
+    "id": "hotkey_parse",
+    "claim": "Per-target voice/send hotkeys parse to pynput key sequences",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "grok": {
+        "voice": [
+          "<Key.ctrl: <17>>",
+          "'d'"
+        ],
+        "send": [
+          "<Key.enter: <13>>"
+        ]
+      },
+      "claude": {
+        "voice": [
+          "<Key.ctrl: <17>>",
+          "'d'"
+        ],
+        "send": [
+          "<Key.enter: <13>>"
+        ]
+      }
+    },
+    "notes": ""
+  },
+  {
+    "id": "ringtone_asset",
+    "claim": "Ringtone WAV exists and is valid mono PCM",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "path": "C:\\dev\\polycom\\assets\\ringtone.wav",
+      "bytes": 80044,
+      "channels": 1,
+      "rate": 16000,
+      "frames": 40000
+    },
+    "notes": ""
+  },
+  {
+    "id": "tray_deps",
+    "claim": "Tray dependencies (pystray/Pillow) work and icon renders",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "icon_size": [
+        64,
+        64
+      ],
+      "pystray": "?"
+    },
+    "notes": ""
+  },
+  {
+    "id": "autostart",
+    "claim": "Autostart shortcut exists in Windows Startup folder",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "files": [
+        "C:\\Users\\ckruijf.cobot\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\CX300 Bridge.lnk"
+      ]
+    },
+    "notes": ""
+  },
+  {
+    "id": "state_machine",
+    "claim": "Keys 1/2/* switch targets in Idle; hook_off\u2192RECORDING+voice; hook_on\u2192WAITING+send; done\u2192RINGING; keys blocked while recording",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "timeline": [
+        "after_key2=claude",
+        "after_key1=grok",
+        "after_star=claude",
+        "after_hook_off=RECORDING",
+        "key_during_rec_target=claude",
+        "after_hook_on=WAITING",
+        "after_done=RINGING"
+      ],
+      "calls": [
+        "start_voice:claude",
+        "send_prompt:claude",
+        "ring"
+      ]
+    },
+    "notes": ""
+  },
+  {
+    "id": "hid_event_wiring",
+    "claim": "Synthetic HID events (key/hook) drive target switch, voice start, and send",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "target": "claude",
+      "state": "WAITING",
+      "calls": [
+        "voice:claude",
+        "send:claude"
+      ],
+      "target_ok": true,
+      "rec_ok": true,
+      "wait_ok": true
+    },
+    "notes": ""
+  },
+  {
+    "id": "window_focus",
+    "claim": "Both Grok Bot and Claude windows can be found and focused",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "grok": {
+        "launched": false,
+        "windows": [
+          "Grok Bot"
+        ],
+        "focused": true
+      },
+      "claude": {
+        "launched": false,
+        "windows": [
+          "Claude"
+        ],
+        "focused": true
+      }
+    },
+    "notes": ""
+  },
+  {
+    "id": "live_hotkey_fire",
+    "claim": "Focus Grok Bot and deliver configured voice hotkey without error",
+    "verdict": "VERIFIED",
+    "evidence": {
+      "focused": true,
+      "hotkey": "<ctrl>+d",
+      "fired": true
+    },
+    "notes": ""
+  },
+  {
+    "id": "hardware_hid",
+    "claim": "CX300 HID 095D:9201 is present and openable",
+    "verdict": "INCONCLUSIVE",
+    "evidence": {
+      "hid_count": 0,
+      "reason": "device not present / unplugged"
+    },
+    "notes": "Plug in the CX300 USB cable and re-run verify."
+  },
+  {
+    "id": "hardware_audio",
+    "claim": "CX300 appears as playback and capture audio endpoints",
+    "verdict": "INCONCLUSIVE",
+    "evidence": {
+      "listing": "(no devices matching 'Polycom CX300')",
+      "playback": null,
+      "capture": null
+    },
+    "notes": "No Polycom audio endpoints \u2014 phone likely unplugged."
+  },
+  {
+    "id": "hardware_hook_keys",
+    "claim": "Handset hook and keypad 1/2/* produce distinct HID edges",
+    "verdict": "INCONCLUSIVE",
+    "evidence": {
+      "reason": "no HID device"
+    },
+    "notes": ""
+  }
+]
